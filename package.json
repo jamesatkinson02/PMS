@@ -1,0 +1,24 @@
+{
+  "name": "PMS",
+  "version": "1.0.0",
+  "description": "Parking management system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "proxy:":"http://localhost:3001",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesatkinson02/PMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jamesatkinson02/PMS/issues"
+  },
+  "homepage": "https://github.com/jamesatkinson02/PMS#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
