@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node server/index.js"
   },
-  "proxy:":"http://localhost:3001",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jamesatkinson02/PMS.git"
