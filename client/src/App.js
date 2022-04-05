@@ -1,30 +1,25 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {Home} from "./components/Home.js";
+import Login from "./components/Login.js";
+import useToken from "./components/useToken";
 
 function App() {
-  const [data, setData] = React.useState(null);
+  const {token, setToken} = useToken();
 
-
-  React.useEffect(() => {
-    fetch("/api", {
-      method:'GET',
-      headers:{
-        Accept: 'application/json',
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-  
-
-
+  if(!token)
+    return <Login setToken={setToken} />
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
+    <div className="wrapper">
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+
+      </Routes>
+      </BrowserRouter> 
     </div>
   );
 }

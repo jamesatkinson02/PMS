@@ -6,10 +6,9 @@ const app = express();
 
 app.use(cors());
 
-app.get("/api", (req, res) => {
-    res.json({ message: "Hello from server!" });
-  });
-  
+app.use("/login", (req, res) => {
+  res.send({token: 'abc123'});
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
