@@ -4,24 +4,26 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {Home} from "./components/Home.js";
 import Login from "./components/Login.js";
-import useToken from "./components/useToken";
+import Register from "./components/Register.js"
+import useToken from "./hooks/useToken";
+
 
 function App() {
   const {token, setToken} = useToken();
 
-  if(!token)
-    return <Login setToken={setToken} />
-  return (
+  
+    return token ? (
     <div className="wrapper">
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-
+        <Route path="/home" element={<Home />} /> 
+        <Route path="/register" element={<Register />} /> 
+         
       </Routes>
       </BrowserRouter> 
     </div>
-  );
+  ) : <Login setToken ={setToken} />
 }
 
 export default App;

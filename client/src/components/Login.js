@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
+import { Link, useNavigate, Router, Route} from 'react-router-dom';
+import { render } from 'react-dom';
+import Register from './Register'
 
 async function loginUser(credentials) {
     return fetch('/login', {
@@ -17,7 +19,7 @@ export default function Login({setToken})
 {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-
+    const [register, setRegister] = useState();
     const handleSubmit = async e => {
         e.preventDefault();
 
@@ -25,19 +27,24 @@ export default function Login({setToken})
         setToken(token);
     }
     
-    return (
+    return !register ? (
+        
+        <div>
         <form onSubmit={handleSubmit}>
             <label>
                 <p> username </p>
-                <input type="text" onChange={e => setUsername(e.target.value)} />
+                <input type="text" onChange={e => setUsername(e.target.value)} required />
             </label>
             <label>
                 <p> password </p>
-                <input type="password" onChange={e => setPassword(e.target.value)} />
+                <input type="password" onChange={e => setPassword(e.target.value)} required />
             </label>
             <button type="submit">Login</button>
         </form>
-    );
+        <button onClick={() => {setRegister(true)}}> Sign up here! </button>
+        </div>
+        
+    ) : <Register />
 }
 
 Login.propTypes = {
