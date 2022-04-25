@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, useNavigate, Router, Route} from 'react-router-dom';
 import { render } from 'react-dom';
 import Register from './Register'
-
+import "./Login.css";
 
 
 async function loginUser(credentials) {
@@ -30,18 +30,26 @@ export default function Login({setToken})
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [register, setRegister] = useState();
+    const [success, setSuccess] = useState();
     const handleSubmit = async e => {
         e.preventDefault();
 
         const token = await loginUser({username, password});
         if(token)
+        {
+            setSuccess(true);
             setToken(token);    
+        }
+        else
+            setSuccess(false);
        
     }
     
     return !register ? (
-        
         <div>
+        <h1>Login</h1>
+        <div className="wrapper">
+            <div className="center">
         <form onSubmit={handleSubmit}>
             <label>
                 <p> username </p>
@@ -54,8 +62,10 @@ export default function Login({setToken})
             <button type="submit">Login</button>
         </form>
         <button onClick={() => {setRegister(true)}}> Sign up here! </button>
+        {success===false ? <p className="red"> Incorrect Username/Password </p> : null}
         </div>
-        
+        </div>
+        </div>
     ) : <Register />
 }
 

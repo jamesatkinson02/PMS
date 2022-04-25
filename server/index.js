@@ -14,13 +14,16 @@ app.use(express.json());
 
 dotenv.config();
 
-console.log(process.env.TOKEN_SECRET);
-
 app.use("/login", (req, res) => {
 
   const data = fs.readFileSync(`${__dirname}/db/drivers.json`);
+
+  if(data.length == 0)
+    res.status(400).send({message: 'User table empty!'});
+
   const json = JSON.parse(data.toString());
-  if(json.password == crypto.createHash('md5').update(req.body.password).digest('hex'))
+
+  if(json.username == req.body.username && json.password == crypto.createHash('md5').update(req.body.password).digest('hex'))
   {
     jwt.sign({admin: false, name: req.body.username}, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
     {
