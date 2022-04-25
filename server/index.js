@@ -34,6 +34,11 @@ app.use("/register", (req, res) => {
   
 })
 
+app.use('/verify-token', (req, res) => {
+  var decoded = jwt.verify(req.body.token, process.env.TOKEN_SECRET);
+  console.log(decoded);
+})
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
