@@ -4,16 +4,26 @@ import { Link, useNavigate, Router, Route} from 'react-router-dom';
 import { render } from 'react-dom';
 import Register from './Register'
 
+
+
 async function loginUser(credentials) {
-    return fetch('/login', {
+    const response =  fetch('/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(credentials)
     })
-      .then(data => data.json())
-   }
+
+    if((await response).status == 400)
+    {
+        console.error("Incorrect username/password");
+        return;
+    }
+
+    return response.then(data => data.json());
+
+}
 
 export default function Login({setToken})
 {
@@ -24,7 +34,9 @@ export default function Login({setToken})
         e.preventDefault();
 
         const token = await loginUser({username, password});
-        setToken(token);
+        if(token)
+            setToken(token);    
+       
     }
     
     return !register ? (

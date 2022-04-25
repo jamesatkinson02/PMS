@@ -1,29 +1,46 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import {Home} from "./components/Home.js";
 import Login from "./components/Login.js";
 import Register from "./components/Register.js"
 import useToken from "./hooks/useToken";
 
+async function verify(token)
+{
+  var isVerified = fetch("/verify-token", {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+
+    },
+    body: JSON.stringify({token:token})
+}).then(data => data.json()).then(json => {
+  if(json.name == 'TokenExpiredError')
+  {
+    return false;
+  }
+  return true;
+  
+}).then(value => value.valueOf());
+
+return isVerified;
+}
 
 function App() {
-  const {token, setToken} = useToken();
+  let {token, setToken} = useToken();
 
-  if(token)
-  {
-    fetch("/verify-token", {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-
-      },
-      body: JSON.stringify({token:token})
+  verify(token).then(val => {
+    if(!val)
+    {
+      localStorage.removeItem('token');
+      token = null;
+    }
+     
   })
-  }
-  
-    return token ? (
+
+    return  token ? (
     <div className="wrapper">
       <BrowserRouter>
       <Routes>

@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const fs = require('fs');
+const crypto = require('crypto'); 
 
 
 const PORT = process.env.PORT || 3001;
@@ -16,27 +17,40 @@ dotenv.config();
 console.log(process.env.TOKEN_SECRET);
 
 app.use("/login", (req, res) => {
-  jwt.sign(req.body, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
+
+  const data = fs.readFileSync(`${__dirname}/db/drivers.json`);
+  const json = JSON.parse(data.toString());
+  if(json.password == crypto.createHash('md5').update(req.body.password).digest('hex'))
   {
-    res.send({token:tok});
-  });
+    jwt.sign({admin: false, name: req.body.username}, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
+    {
+      res.send({token:tok});
+    });
+  }
+  else
+  {
+    res.status(400).send({message: 'Incorrect username/password!'});
+  }
 
 });
 
 app.use("/register", (req, res) => {
+  req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
   const str = JSON.stringify(req.body);
-  fs.appendFileSync(`${__dirname}/db/drivers.json`, '\n' + str, err => {
-    if(err)
-    {
-      console.error(err);
-    }
-  })
+  fs.appendFileSync(`${__dirname}/db/drivers.json`, str, {'flags': 'a'});
   
 })
 
 app.use('/verify-token', (req, res) => {
-  var decoded = jwt.verify(req.body.token, process.env.TOKEN_SECRET);
-  console.log(decoded);
+  jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
+  {
+    if(err)
+    {
+      res.send(err);
+    }
+    else
+      res.send(decoded);
+  });
 })
 
 app.listen(PORT, () => {
