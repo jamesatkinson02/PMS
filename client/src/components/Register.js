@@ -1,5 +1,7 @@
 import {React, setState, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+
+
 export default function Register()
 {
     const [username, setUsername] = useState();
@@ -17,6 +19,8 @@ export default function Register()
             },
             body: JSON.stringify({username, password, email, carRegistration})
         })
+
+        window.location.reload();
     }
 
     return( 

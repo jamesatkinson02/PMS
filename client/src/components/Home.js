@@ -7,10 +7,12 @@ import {useNavigation} from 'react-router-dom';
 export function Home()
 {
     const navigate = useNavigate();
+
+    
         
     const logout = () =>{
         localStorage.removeItem('token');
-        navigate(0);
+        navigate(0);                        //refreshes page
     }
 
     return (<div>

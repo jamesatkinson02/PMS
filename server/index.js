@@ -15,33 +15,57 @@ app.use(express.json());
 dotenv.config();
 
 app.use("/login", (req, res) => {
+  let obj = {
+    users: []
+  }
 
   const data = fs.readFileSync(`${__dirname}/db/drivers.json`);
 
   if(data.length == 0)
+  {
     res.status(400).send({message: 'User table empty!'});
+    return;
+  }
 
-  const json = JSON.parse(data.toString());
 
-  if(json.username == req.body.username && json.password == crypto.createHash('md5').update(req.body.password).digest('hex'))
-  {
-    jwt.sign({admin: false, name: req.body.username}, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
+  obj = JSON.parse(data);
+  
+  const isUserFound = obj.users.find(item => item.username === req.body.username && item.password === crypto.createHash('md5').update(req.body.password).digest('hex'));
+
+
+    if(isUserFound)
     {
-      res.send({token:tok});
-    });
-  }
-  else
-  {
-    res.status(400).send({message: 'Incorrect username/password!'});
-  }
+     
+      jwt.sign({admin: isUserFound.admin, name: isUserFound.username}, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
+      {
+        res.send({token:tok});
+      });
+    }
+    else
+    {
+   
+      res.status(400).send({message:'Incorrect username/password!'});
+    }
 
 });
 
 app.use("/register", (req, res) => {
   req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
   const str = JSON.stringify(req.body);
-  fs.appendFileSync(`${__dirname}/db/drivers.json`, str, {'flags': 'a'});
-  
+
+  let obj = {
+    users: []
+  }
+
+  const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+
+  obj = JSON.parse(buffer);
+
+  obj.users.push({username: req.body.username, password : req.body.password, email: req.body.email, carRegistration: req.body.carRegistration, admin: false});
+
+  fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(obj));
+
+
 })
 
 app.use('/verify-token', (req, res) => {

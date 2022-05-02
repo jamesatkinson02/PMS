@@ -1,5 +1,6 @@
 import {useState} from 'react';
 
+/* custom hook for accessing the token  */
 export default function useToken()
 {
 
