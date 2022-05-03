@@ -3,6 +3,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import {Home} from "./components/Home.js";
+import {About} from "./components/About.js";
+
 import Login from "./components/Login.js";
 import Register from "./components/Register.js"
 import useToken from "./hooks/useToken";
@@ -40,6 +42,18 @@ function App() {
      
   })
 
+  return (<div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/home" element={<Home />} />
+        
+      </Routes>
+    </BrowserRouter>
+  </div>)
+}
+/*
     return  token ? (
     <div className="wrapper">
       <BrowserRouter>
@@ -53,5 +67,5 @@ function App() {
     </div>
   ) : <Login setToken ={setToken} />
 }
-
+*/
 export default App;
