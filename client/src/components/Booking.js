@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip} from 'react-bootstrap';
-
+import './Booking.css';
 
 function parkingSpaceGrid()
 {
@@ -29,7 +29,6 @@ function parkingSpaceGrid()
 
 export function Booking()
 {
-    
     let grid = parkingSpaceGrid();
         return (
             <div style={{ display: 'block', padding: 30 }}>
@@ -52,5 +51,7 @@ export function Booking()
 
       
       </div>
+
       );
+      
 }
