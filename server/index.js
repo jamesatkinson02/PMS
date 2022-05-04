@@ -14,7 +14,7 @@ app.use(express.json());
 
 dotenv.config();
 
-app.use("/login", (req, res) => {
+app.use("/api/login", (req, res) => {
   let obj = {
     users: []
   }
@@ -49,7 +49,7 @@ app.use("/login", (req, res) => {
 
 });
 
-app.use("/register", (req, res) => {
+app.use("/api/register", (req, res) => {
   req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
   const str = JSON.stringify(req.body);
 
@@ -68,7 +68,7 @@ app.use("/register", (req, res) => {
 
 })
 
-app.use('/verify-token', (req, res) => {
+app.use('/api/verify-token', (req, res) => {
   jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
   {
     if(err)
