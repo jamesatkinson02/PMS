@@ -7,7 +7,7 @@ import "./Login.css";
 
 
 async function loginUser(credentials) {
-    const response =  fetch('/login', {
+    const response =  fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

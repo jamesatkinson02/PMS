@@ -9,7 +9,7 @@ import useToken from "./hooks/useToken";
 
 async function verify(token)
 {
-  var isVerified = fetch("/verify-token", {
+  var isVerified = fetch("/api/verify-token", {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
