@@ -8,14 +8,14 @@ function parkingSpaceGrid()
 
     for(let rows = 0; rows < 18; rows++)
     {
-        for(let cols =0; cols < 20; cols++)
+        for(let cols =0; cols < 25; cols++)
         {
             if(cols%2 != 0)
                 grid[rows][cols] = (<Col sm="auto"><OverlayTrigger
                     placement="right"
                     trigger="click"
                     overlay={ <Tooltip id="button-tooltip">
-                    {`Column ${cols}`}
+                    {`Row ${rows+1}\nColumn ${cols+1}`}
                   </Tooltip>}
                   ><Button variant="primary"></Button></OverlayTrigger></Col>);
             else
