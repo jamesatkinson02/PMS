@@ -48,7 +48,7 @@ export default function Login({setToken})
     return !register ? (
         <div>
         <h1>Login</h1>
-        <div className="wrapper">
+        <div className="loginWrapper">
             <div className="center">
         <form onSubmit={handleSubmit}>
             <label>

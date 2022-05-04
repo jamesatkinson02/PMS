@@ -6,6 +6,9 @@ import {Home} from "./components/Home.js";
 import Login from "./components/Login.js";
 import Register from "./components/Register.js"
 import useToken from "./hooks/useToken";
+import {Booking} from "./components/Booking.js"
+import {Navbar, Container, Nav} from "react-bootstrap";
+import {About} from "./components/About"
 
 async function verify(token)
 {
@@ -40,18 +43,19 @@ function App() {
      
   })
 
-    return  token ? (
-    <div className="wrapper">
+  //  return  token ? (
+   return (<div>
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} /> 
         <Route path="/register" element={<Register />} /> 
-         
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       </BrowserRouter> 
     </div>
-  ) : <Login setToken ={setToken} />
+  )//: <Login setToken ={setToken} />
 }
 
 export default App;
