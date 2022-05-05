@@ -12,3 +12,47 @@
     display:table;
     clear:both;
 }
+
+.hero-image {
+   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+   url(../images/driver-using-mobile-phone-navigation_53876-95136.webp);
+  
+   min-height:60vh;
+   position:relative;
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position:right center;
+   
+}
+
+.bookingTextForm{
+  color:white;
+  
+}
+
+.bookingCentered
+{
+    top:10%;
+}
+
+.formColour
+{
+  background-color:  hsla(0, 0%, 0%, 0)
+}
+
+.bookingContainer
+{
+  width:50%;
+  margin-top:100px;
+}
+
+.container {
+    position: relative;
+  }
+  
+  .image {
+    display: block;
+    width: 100%;
+    height: 50%;
+  }
+

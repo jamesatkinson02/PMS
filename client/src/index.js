@@ -6,7 +6,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuLzGAlJWfeHKK3gNMh3AY0AuAR4-THYo&libraries=places&callback=initMap">
+</script>
 
 ReactDOM.render(
   <React.StrictMode>  

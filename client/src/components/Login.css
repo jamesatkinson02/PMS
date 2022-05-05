@@ -5,15 +5,20 @@
 
 .loginWrapper
 {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
-    
-    border:2px solid cadetblue
+    background-color: lightblue;
+    min-height:100vh;
+    position:relative;
 }
 
 .center
 {
-    position:relative;
+    position: absolute;
+    top:10%;
+}
+
+
+form
+{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
 }

@@ -43,8 +43,8 @@ function App() {
      
   })
 
-  //  return  token ? (
-   return (<div>
+   return( //token ? (
+   <div>
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -52,10 +52,10 @@ function App() {
         <Route path="/register" element={<Register />} /> 
         <Route path="/booking" element={<Booking />} />
         <Route path="/about" element={<About />} />
-      </Routes>
+       </Routes>
       </BrowserRouter> 
     </div>
-  )//: <Login setToken ={setToken} />
+  )// : <Login setToken ={setToken} />
 }
 
 export default App;
