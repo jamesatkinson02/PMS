@@ -1,1 +1,1 @@
-{"users":[{"username":"james","password":"e99a18c428cb38d5f260853678922e03","email":"jim007.atkinson@hotmail.co.uk","carRegistration":"ABCD","admin":"true"},{"username":"ergerg","password":"e99a18c428cb38d5f260853678922e03","email":"jim007.atkinson@hotmail.co.uk","carRegistration":"erfgerge","admin":false},{"username":"johnjohnson","password":"e99a18c428cb38d5f260853678922e03","email":"fwewef@greg.com","carRegistration":"rggergerq","admin":false}]}
+{"users":[],"reservations":[],"locations":[{"name":"Main Car Park","longitude":52.6232308,"latitude":1.2430286}]}
