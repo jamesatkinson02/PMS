@@ -1,18 +1,44 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import useToken from "../hooks/useToken.js";
-import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade} from 'react-bootstrap';
+import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade, Alert} from 'react-bootstrap';
 import './Booking.css';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {Icon} from 'leaflet';
-import marker from '../images/marker-icon.png';
-const myIcon = new Icon({iconUrl: marker, iconSize:[48,48]});
-var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0');
-var yyyy = today.getFullYear();
+import marker from '../images/parking-location.png';
+const myIcon = new Icon({iconUrl: marker, iconSize:[32,32]});
 
-today = yyyy + '-' + mm + '-' + dd;
+
+//gets present date
+var today = toStrDate(new Date());
+
+//maximum stay of up to 10 days
+var tenDaysFromNow = toStrDate(addDays(today, 10)); 
+
+function addDays(date, days)
+{
+    
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+    
+}
+
+function toStrDate(date)
+{
+    var strDate = new Date(date);
+    var dd = String(strDate.getDate()).padStart(2, '0');
+    var mm = String(strDate.getMonth() + 1).padStart(2, '0');
+    var yyyy = strDate.getFullYear();
+    strDate = yyyy + '-' + mm + '-' + dd;  
+    return strDate; 
+}
+
+function parseStrDate(str)
+{
+    return new Date(str);
+
+}
 
 function parkingSpaceGrid()
 {
@@ -39,15 +65,23 @@ function parkingSpaceGrid()
     return grid;
 }
 
+
 export function Booking()
 {
+    const [formValues, setFormValues] = useState({
+        parkingLot: '',
+        dateFrom: '',
+        dateTo: '',
+        timeFrom: '',
+        timeTo: ''
+    });
 
-    const [parkingLot, setParkingLot] = useState();
-    const [dateFrom, setDateFrom] = useState();
-    const [dateTo, setDateTo] = useState();
-    const [timeFrom, setTimeFrom] = useState();
-    const [timeTo, setTimeTo] = useState();
+    const changeHandler = e => {
+        setFormValues({...formValues, [e.target.name]: e.target.value})
+     }
 
+    const [tenDayError, setTenDayError] = useState(false);
+ 
     let {token, setToken} = useToken();
     
     /*
@@ -68,20 +102,38 @@ export function Booking()
             ))}
         */
 
+     
+
         const handleSubmit = async e => {
             e.preventDefault();
+
+            //checks if dates are more than 10 days apart, which is prohibited.
+            if(((new Date(formValues.dateTo).getTime() - new Date(formValues.dateFrom).getTime()) / (1000*3600*24)) > 10)
+            {
+                setTenDayError(true);
+                return;
+            }
 
             fetch('/api/request-parking', {
                 method: 'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({token, parkingLot, dateFrom, dateTo, timeFrom, timeTo})
-            }).then(resp => resp.json()).then(json => console.log(json));
+                body:JSON.stringify({token, parkingLot:formValues.parkingLot, dateFrom:formValues.dateFrom, dateTo:formValues.dateTo, timeFrom:formValues.timeFrom, timeTo:formValues.timeTo})
+            }).then(resp => resp.json()).then(data => {
+                    
+
+            });
+
+
+
+        
 
         }
-
+        
         const coordinates = [52.623041, 1.244426];
+
+        
       return ( 
           <div>
           <div className="hero-image" >
@@ -93,7 +145,7 @@ export function Booking()
                         <Row className="mb-3">
                             <Form.Group as={Col}>
                             <Form.Label>Campus Location</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." name="parkingLot" onChange={e => setParkingLot(e.target.value)} >
+                            <Form.Control as="select" defaultValue="Choose..." name="parkingLot" id="parkingLot" onChange={changeHandler} >
                                 <option disabled="disabled">Choose...</option>
                                 <option>Main Car Park</option>
                                 <option>West Car Park</option>
@@ -103,17 +155,18 @@ export function Booking()
                             
                             <Form.Group as={Col}>
                                 <Form.Label>Parking From</Form.Label>
-                                <Form.Control type="date"  min={today} name="dateFrom" onChange={e => setDateFrom(e.target.value)} required/>
-                                <Form.Control type="time" min="0:00" max="23:59" name="timeFrom" onChange={e => setTimeFrom(e.target.value)} required/>
+                                <Form.Control type="date"  min={today} name="dateFrom" id="dateFrom" onChange={changeHandler } required/>
+                                <Form.Control type="time" min="0:00" max="23:59" name="timeFrom" id="timeFrom" onChange={changeHandler} required/>
      
                             </Form.Group>
                             
                             <Form.Group as={Col}>
                                 <Form.Label>Parking Till</Form.Label>
-                                <Form.Control type="date" min={today} max="2022-05-12" name="dateTo" onChange={e => setDateTo(e.target.value)} required/>
-                                <Form.Control type="time" min="0:15" max="23:59" name="timeTo" onChange={e => setTimeTo(e.target.value)} required/>
-                            </Form.Group>
+                                <Form.Control type="date" min={formValues.dateFrom} name="dateTo" id="dateTo" onChange={changeHandler} required/>
+                                <Form.Control type="time" min={"0:00"} max="23:59" name="timeTo" id="timeTo" onChange={changeHandler} required/>
+                                <Alert key={'alert'} variant="danger" style={{opacity:"90%"}} style={{marginTop:"10px"}} show={tenDayError} onClose={() => setTenDayError(false)} dismissible>You can only park up to a maximum of 10 days!</Alert>
            
+                            </Form.Group>
                         </Row>
                         <Button variant="primary" type="submit">Find Parking Space</Button>
                     </Form>
