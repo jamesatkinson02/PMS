@@ -18,8 +18,6 @@ export function Home()
     }
 
     return (<div class = "container-fluid">        
-                
-
                 <div class="content">
                     <div class="items-collection">
                         <a href = "#">
@@ -37,8 +35,8 @@ export function Home()
                         </a>
                     </div>
                 </div>
-
-                <h1 class = "display-1">Get Started</h1>
+                
+                <a class="btn btn-primary btn-lg btn-block" href = "/login"><h1 class = "display-3 btn-txt">Get Started</h1></a>
                 <button type="button" class="btn btn-primary bg-gradient nav-bar-btn" onClick={() => {logout()} 
                 }> Signout </button>
                 
