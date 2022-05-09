@@ -43,11 +43,21 @@ function App() {
   })
 
   return (<div>
+    <div class = "row">
+      <div class="p-3 bg-primary bg-gradient text-white">
+        <h1>UEA Parking</h1>                        
+        <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/login" role="button">Login</a>
+        <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Support</a>
+        <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a>
+        <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Home</a>
+      </div>
+    </div>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         
       </Routes>
     </BrowserRouter>

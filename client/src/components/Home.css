@@ -40,12 +40,6 @@ h1
     display: inline;
 }
 
-.items-collection
-{
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
 .item
 {
     position: relative;
@@ -53,8 +47,6 @@ h1
 
 .item-background
 {
-    height: 100%;
-    width: 2048px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
