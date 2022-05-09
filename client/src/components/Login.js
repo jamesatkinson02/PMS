@@ -54,7 +54,7 @@ export default function Login({setToken})
     return !register ? (
         <div className="loginWrapper">
         <div className="d-flex justify-content-center align-items-center">
-        <Form className="rounded p-4 p-sm-3 center box" onSubmit={handleSubmit}>
+        <Form className="rounded p-4 p-sm-3 center box loginForm" onSubmit={handleSubmit}>
         <h1>Login</h1>
             <Form.Group className="mb-3">
                 <Form.Label> Username </Form.Label>

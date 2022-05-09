@@ -52,6 +52,7 @@ function App() {
         <Route path="/register" element={<Register />} /> 
         <Route path="/booking" element={<Booking />} />
         <Route path="/about" element={<About />} />
+
        </Routes>
       </BrowserRouter> 
     </div>

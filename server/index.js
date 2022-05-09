@@ -36,7 +36,7 @@ app.use("/api/login", (req, res) => {
     if(isUserFound)
     {
      
-      jwt.sign({admin: isUserFound.admin, name: isUserFound.username}, process.env.TOKEN_SECRET, {expiresIn: '1800s'}, function(err, tok)
+      jwt.sign({admin: isUserFound.admin, name: isUserFound.username}, process.env.TOKEN_SECRET, {expiresIn: '1800'}, function(err, tok)
       {
         res.send({token:tok});
       });

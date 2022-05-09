@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useToken from "../hooks/useToken.js";
-import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade, Alert} from 'react-bootstrap';
+import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade, Alert, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
 import './Booking.css';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
@@ -164,7 +164,7 @@ export function Booking()
                                 <Form.Label>Parking Till</Form.Label>
                                 <Form.Control type="date" min={formValues.dateFrom} name="dateTo" id="dateTo" onChange={changeHandler} required/>
                                 <Form.Control type="time" min={"0:00"} max="23:59" name="timeTo" id="timeTo" onChange={changeHandler} required/>
-                                <Alert key={'alert'} variant="danger" style={{opacity:"90%"}} style={{marginTop:"10px"}} show={tenDayError} onClose={() => setTenDayError(false)} dismissible>You can only park up to a maximum of 10 days!</Alert>
+                                <Alert key={'alert'} variant="danger" style={{opacity:"90%", marginTop:"10px"}} show={tenDayError} onClose={() => setTenDayError(false)} dismissible>You can only park up to a maximum of 10 days!</Alert>
            
                             </Form.Group>
                         </Row>
@@ -174,7 +174,50 @@ export function Booking()
           </div>
 
         </div>
-        <MapContainer center={coordinates} zoom={12} style={{height:'50vh'}}>
+        <Row className="d-flex justify-content-center align-items-center">
+        <Card style={{ margin: "10px", width: '32rem' }}>
+  <Card.Body>
+    <h2>UEA Parking just got easier!</h2>
+    <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+    <Card.Text>
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </Card.Text>
+  </Card.Body>
+  <ListGroup className="list-group-flush">
+    <ListGroupItem>Cras justo odio</ListGroupItem>
+    <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+    <ListGroupItem>Vestibulum at eros</ListGroupItem>
+  </ListGroup>
+  <Card.Body>
+    <Card.Link href="#">Card Link</Card.Link>
+    <Card.Link href="#">Another Link</Card.Link>
+  </Card.Body>
+</Card>
+<Card style={{margin: "10px", width: '32rem' }}>
+  <Card.Body>
+    <h2>UEA Parking just got easier!</h2>
+    <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+    <Card.Text>
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </Card.Text>
+  </Card.Body>
+  <ListGroup className="list-group-flush">
+    <ListGroupItem>Cras justo odio</ListGroupItem>
+    <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+    <ListGroupItem>Vestibulum at eros</ListGroupItem>
+  </ListGroup>
+  <Card.Body>
+    <Card.Link href="#">Card Link</Card.Link>
+    <Card.Link href="#">Another Link</Card.Link>
+  </Card.Body>
+</Card>
+
+
+</Row>
+                         
+     {false ? <MapContainer center={coordinates} zoom={12} style={{height:'50vh'}}>
       <TileLayer
         attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -186,9 +229,9 @@ export function Booking()
             </span>
         </Popup>
       </Marker>
-    </MapContainer>;
+    </MapContainer> : null }
 
         </div>
-        
-    );
+       
+    ); 
 }
