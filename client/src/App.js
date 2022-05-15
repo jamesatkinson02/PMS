@@ -11,7 +11,7 @@ import {Navbar, Container, Nav} from "react-bootstrap";
 import {About} from "./components/About"
 import { BookingSearch } from "./components/BookingSearch";
 import MyBookings from "./components/MyBookings";
-
+import ManageAccounts from "./components/ManageAccounts";
 
 async function verify(token)
 {
@@ -25,11 +25,11 @@ async function verify(token)
 }).then(data => data.json()).then(json => {
   if(json.name == 'TokenExpiredError')
   {
-    return false;
+    return null;
   }
-  return true;
+  return json;
   
-}).then(value => value.valueOf());
+});
 
 return isVerified;
 }
@@ -37,18 +37,30 @@ return isVerified;
 function App() {
   let {token, setToken} = useToken();
 
-  verify(token).then(val => {
+  const init = verify(token).then(val => {
     if(!val)
     {
       localStorage.clear();
       token = null;
+      return null;
+    }
+    else{
+      return val;
     }
      
   })
 
    return( token ? (
-   <div>
-  
+    <div>
+      <div class = "row">
+        <div class="p-3 bg-primary bg-gradient text-white">
+          <h1>UEA Parking</h1>                        
+          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/login" role="button">Login</a>
+          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Support</a>
+          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a>
+          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Home</a>
+        </div>
+      </div>
 
       <BrowserRouter>
       <Routes>
@@ -59,6 +71,7 @@ function App() {
         <Route path="/booking/search" element={<BookingSearch />}></Route>
         <Route path="/about" element={<About />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        {init.admin ? <Route path="/manage-accounts" element={<ManageAccounts />} /> : null}
        </Routes>
       </BrowserRouter> 
    

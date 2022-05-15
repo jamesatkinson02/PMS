@@ -108,9 +108,10 @@ export function BookingSearch(props)
             body:JSON.stringify({token: token, parkingLot:obj.parkingLot, price:payment, dateFrom:obj.dateFrom, dateTo:obj.dateTo, timeFrom:obj.timeFrom, timeTo:obj.timeTo})
         });
 
-        console.log(obj.token);
+        setShow(false);
 
         alert("Payment successful!");
+        
         
     }
 

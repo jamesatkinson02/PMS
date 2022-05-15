@@ -1,0 +1,105 @@
+h1
+{
+    display: inline;
+}
+
+.nav-bar-btn
+{
+    margin-left: 1em;
+    margin-top: 0.25em;
+    border-width: 2px;
+}
+
+.links
+{
+    float: right;
+}
+
+.btn-outline-light
+{
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.splash-container
+{
+    display: block;
+}
+
+.splash-container h1
+{
+    padding-top: 100px;
+}
+
+.splash-screen-img
+{
+    margin-left: -0.75em;
+    width: 2048px;
+    height: 512px;
+    object-fit: cover;
+    display: inline;
+}
+
+.item
+{
+    position: relative;
+}
+
+.item-background
+{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.item-foreground
+{
+    position: absolute;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding-left: 27.5em;
+    padding-bottom: 0em;
+}
+
+.item-subtitle
+{
+    position: relative;
+    font-weight: bolder;
+}
+
+.img-darken
+{
+    transition: 1s;
+    filter: brightness(25%);
+}
+
+.item-foreground .item-subtitle
+{
+    transition: 1s;
+    font-weight: bolder;
+    color: transparent;
+}
+
+.item-foreground:hover .item-subtitle
+{
+    font-weight: bolder;
+    color: white;
+    text-shadow: 10px 10px 20px #000000;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.btn-block
+{
+    width: 100%;
+    height: 100px;
+}
+
+.display-3
+{
+    font-weight: 400;
+}
