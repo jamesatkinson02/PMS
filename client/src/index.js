@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-<script defer src="https://www.paypal.com/sdk/js?client-id=AQSlYlKlWhGct7b3C5gxGfvadKvrBhVGwKJo2f10cSC2IDE_PEsCBxMQLhrixEGDbdMOTODb-lAEZEmE&currency=GBP"></script>
 
 ReactDOM.render(
  // <React.StrictMode>  

@@ -135,7 +135,7 @@ export function Booking()
               return;
             }
            //   dispatch({type: 'SET MAP LOCATION', location:{longitude:data.longitude, latitude:data.latitude}});
-              navigate('/booking/search', {state: {pricing: data.prices, spaces: data.spaces, freeSpaces: data.freeSpaces, parkingLot: state.parkingLot, timeFrom:state.timeFrom, timeTo:state.timeTo, dateFrom:state.dateFrom, dateTo: state.dateTo, longitude: data.longitude, latitude:data.latitude}});
+              navigate('/booking/search', {state: {token: token, pricing: data.prices, spaces: data.spaces, freeSpaces: data.freeSpaces, parkingLot: state.parkingLot, timeFrom:state.timeFrom, timeTo:state.timeTo, dateFrom:state.dateFrom, dateTo: state.dateTo, longitude: data.longitude, latitude:data.latitude}});
               
               
             });

@@ -16,9 +16,16 @@ const formReducer = (state, action) => {
                 ...state,
                 location: action.location
             }
+        case 'TOGGLE NO MORE SPACES MODAL':
+            return {
+                ...state,
+                noMoreSpaces: !state.noMoreSpaces
+            }
         default:
             return state;
         
     }
 }
+
+
 export default formReducer;
