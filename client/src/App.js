@@ -50,7 +50,7 @@ function App() {
      
   })
 
-   return( token ? (
+   return( //token ? (
      
     <div>
       <div class = "row">
@@ -60,6 +60,7 @@ function App() {
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Support</a>
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a>
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Home</a>
+          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/my-bookings" role="button">My Bookings</a>
         </div>
       </div>
 
@@ -72,12 +73,14 @@ function App() {
         <Route path="/booking/search" element={<BookingSearch />}></Route>
         <Route path="/about" element={<About />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
+        
         {init.admin ? <Route path="/manage-accounts" element={<ManageAccounts />} /> : null}
        </Routes>
       </BrowserRouter> 
    
     </div>
-  ) : <Login setToken ={setToken} />);
+  ) //: <Login setToken ={setToken} />);
 }
 
 export default App;

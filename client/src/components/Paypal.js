@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-<script src="https://www.paypal.com/sdk/js?client-id=ASiAcwE_h2zhisVeJ7TLEL1H0OS9SfJRg5K2YTZ_tg44N5pXPZfv9lRjoZaHQxJg79n_KmP23pkR7-0W&currency=GBP"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=ASiAcwE_h2zhisVeJ7TLEL1H0OS9SfJRg5K2YTZ_tg44N5pXPZfv9lRjoZaHQxJg79n_KmP23pkR7-0W"></script>
 
 
 export default function PayPal(props) {
