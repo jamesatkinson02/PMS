@@ -6,16 +6,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuLzGAlJWfeHKK3gNMh3AY0AuAR4-THYo&libraries=places&callback=initMap">
-</script>
+<script defer src="https://www.paypal.com/sdk/js?client-id=AQSlYlKlWhGct7b3C5gxGfvadKvrBhVGwKJo2f10cSC2IDE_PEsCBxMQLhrixEGDbdMOTODb-lAEZEmE&currency=GBP"></script>
 
 ReactDOM.render(
-  <React.StrictMode>  
-    <App />
-  </React.StrictMode>,
+ // <React.StrictMode>  
+    <App />,
+ // </React.StrictMode>,
   document.getElementById('root')
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

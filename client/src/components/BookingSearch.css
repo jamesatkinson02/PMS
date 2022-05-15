@@ -1,0 +1,16 @@
+.scroller {
+    position: absolute;
+    height: 100%;
+    overflow:scroll;
+    overflow-y: hidden;
+    white-space:nowrap;   
+    }
+
+.payNowButton
+{
+    position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width:50%;
+}

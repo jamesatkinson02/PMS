@@ -1,13 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import useToken from "../hooks/useToken.js";
-import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade, Alert, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import {Container, Row, Col, Button, Popover, OverlayTrigger, Tooltip, Form, Fade, Alert, Card, ListGroup, ListGroupItem, Modal} from 'react-bootstrap';
 import './Booking.css';
-import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
-import {Icon} from 'leaflet';
-import marker from '../images/parking-location.png';
-const myIcon = new Icon({iconUrl: marker, iconSize:[32,32]});
-
+import formReducer from '../reducers/formReducer.js';
+import {BookingSearch} from './BookingSearch';
+import { useNavigate } from 'react-router-dom';
 
 //gets present date
 var today = toStrDate(new Date());
@@ -68,21 +65,28 @@ function parkingSpaceGrid()
 
 export function Booking()
 {
-    const [formValues, setFormValues] = useState({
-        parkingLot: '',
-        dateFrom: '',
-        dateTo: '',
-        timeFrom: '',
-        timeTo: ''
-    });
+  const initialFormState = {
+    parkingLot: '',
+    dateFrom: '',
+    dateTo: '',
+    timeFrom: '',
+    timeTo: '',
+    tenDayError: false,
+    location: {longitude:null, latitude: null},
+    
+  }
 
+    const [state, dispatch] = useReducer(formReducer,initialFormState );
+    const [noMoreSpaces, setNoMoreSpaces] = useState(false);
     const changeHandler = e => {
-        setFormValues({...formValues, [e.target.name]: e.target.value})
+      dispatch({type: 'FORM INPUT', field: e.target.name, payload: e.target.value});
      }
 
-    const [tenDayError, setTenDayError] = useState(false);
- 
     let {token, setToken} = useToken();
+
+    let navigate = useNavigate();
+
+
     
     /*
     let grid = parkingSpaceGrid();
@@ -102,44 +106,63 @@ export function Booking()
             ))}
         */
 
-     
 
         const handleSubmit = async e => {
             e.preventDefault();
 
             //checks if dates are more than 10 days apart, which is prohibited.
-            if(((new Date(formValues.dateTo).getTime() - new Date(formValues.dateFrom).getTime()) / (1000*3600*24)) > 10)
+            if(((new Date(state.dateTo).getTime() - new Date(state.dateFrom).getTime()) / (1000*3600*24)) > 10)
             {
-                setTenDayError(true);
+                dispatch({type: 'TOGGLE TEN DAY ERROR'});
                 return;
             }
 
-            fetch('/api/request-parking', {
-                method: 'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({token, parkingLot:formValues.parkingLot, dateFrom:formValues.dateFrom, dateTo:formValues.dateTo, timeFrom:formValues.timeFrom, timeTo:formValues.timeTo})
-            }).then(resp => resp.json()).then(data => {
-                    
+            const request =  fetch('/api/request-parking', {
+              method: 'POST',
+              headers:{
+                  'Content-Type':'application/json'
+              },
+              body:JSON.stringify({token, parkingLot:state.parkingLot, dateFrom:state.dateFrom, dateTo:state.dateTo, timeFrom:state.timeFrom, timeTo:state.timeTo})
+          });
+          
 
+          request.then(resp => resp.json()).then(data => {
+            if(data.error)
+            {
+              console.error(data.error);
+              //dispatch({type: 'TOGGLE NO MORE SPACES MODAL'});
+              setNoMoreSpaces(true);
+              return;
+            }
+           //   dispatch({type: 'SET MAP LOCATION', location:{longitude:data.longitude, latitude:data.latitude}});
+              navigate('/booking/search', {state: {pricing: data.prices, spaces: data.spaces, freeSpaces: data.freeSpaces, parkingLot: state.parkingLot, timeFrom:state.timeFrom, timeTo:state.timeTo, dateFrom:state.dateFrom, dateTo: state.dateTo, longitude: data.longitude, latitude:data.latitude}});
+              
+              
             });
-
-
-
-        
-
+            
+            
         }
         
-        const coordinates = [52.623041, 1.244426];
-
-        
-      return ( 
+       return(  //state.location.longitude && state.location.latitude ? <BookingSearch state={state} />
+       //:    
           <div>
+            <Modal show={noMoreSpaces} onHide={() => setNoMoreSpaces(false)}>
+            <Modal.Header closeButton>
+                <Modal.Title id="container-model-title-vcenter">
+                    PMS
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                Unfortunately, All parking spaces have been reserved! <br />Please try again later.
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => setNoMoreSpaces(false)}>Close</Button>
+            </Modal.Footer>
+            </Modal>
           <div className="hero-image" >
               <div  className="d-flex justify-content-center align-items-center">
                 <div className="bookingContainer">
-                    <Form className="formColour bookingTextForm" onSubmit={handleSubmit}>
+                    <Form className="formColour bookingTextForm" onSubmit={handleSubmit} method="POST">
                         <h1 style={{fontFamily:"sans-serif"}}>Find on campus parking in seconds!</h1>
                         <p>Choose a parking lot near your destination!</p>
                         <Row className="mb-3">
@@ -162,9 +185,10 @@ export function Booking()
                             
                             <Form.Group as={Col}>
                                 <Form.Label>Parking Till</Form.Label>
-                                <Form.Control type="date" min={formValues.dateFrom} name="dateTo" id="dateTo" onChange={changeHandler} required/>
-                                <Form.Control type="time" min={"0:00"} max="23:59" name="timeTo" id="timeTo" onChange={changeHandler} required/>
-                                <Alert key={'alert'} variant="danger" style={{opacity:"90%", marginTop:"10px"}} show={tenDayError} onClose={() => setTenDayError(false)} dismissible>You can only park up to a maximum of 10 days!</Alert>
+                                <Form.Control type="date" min={state.dateFrom} max={addDays(state.dateFrom, 10)} name="dateTo" id="dateTo" onChange={changeHandler} required/>
+                                {state.dateFrom === state.dateTo ? <Form.Control type="time" min={state.timeFrom} max="23:59" name="timeTo" id="timeTo" onChange={changeHandler} required/> :  <Form.Control type="time" min={"0:00"} max="23:59" name="timeTo" id="timeTo" onChange={changeHandler} required/>}
+                                
+                                <Alert key={'alert'} variant="danger" style={{opacity:"90%", marginTop:"10px"}} show={state.tenDayError} onClose={() => dispatch({type: 'TOGGLE TEN DAY ERROR'})} dismissible>You can only park up to a maximum of 10 days!</Alert>
            
                             </Form.Group>
                         </Row>
@@ -216,22 +240,8 @@ export function Booking()
 
 
 </Row>
-                         
-     {false ? <MapContainer center={coordinates} zoom={12} style={{height:'50vh'}}>
-      <TileLayer
-        attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={coordinates} icon={myIcon}>
-        <Popup>
-            <span>
-              A pretty CSS3 popup. <br/> Easily customizable.
-            </span>
-        </Popup>
-      </Marker>
-    </MapContainer> : null }
-
-        </div>
+ 
+        </div>)
        
-    ); 
+             
 }

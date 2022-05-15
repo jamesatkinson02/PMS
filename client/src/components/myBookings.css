@@ -1,0 +1,18 @@
+.myBookingsContainer
+{
+    background-color: rgb(217, 228, 243);
+}
+
+#your-img {
+    height: auto; 
+    width: auto; 
+    max-width: 300px; 
+    max-height: 300px;
+}
+.myBookingsButton{
+    
+    bottom: 0;
+    margin:5px;
+   
+}
+

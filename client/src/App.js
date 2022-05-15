@@ -9,6 +9,9 @@ import useToken from "./hooks/useToken";
 import {Booking} from "./components/Booking.js"
 import {Navbar, Container, Nav} from "react-bootstrap";
 import {About} from "./components/About"
+import { BookingSearch } from "./components/BookingSearch";
+import MyBookings from "./components/MyBookings";
+
 
 async function verify(token)
 {
@@ -37,7 +40,7 @@ function App() {
   verify(token).then(val => {
     if(!val)
     {
-      localStorage.removeItem('token');
+      localStorage.clear();
       token = null;
     }
      
@@ -45,16 +48,20 @@ function App() {
 
    return( token ? (
    <div>
+  
+
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} /> 
         <Route path="/register" element={<Register />} /> 
         <Route path="/booking" element={<Booking />} />
+        <Route path="/booking/search" element={<BookingSearch />}></Route>
         <Route path="/about" element={<About />} />
-
+        <Route path="/my-bookings" element={<MyBookings />} />
        </Routes>
       </BrowserRouter> 
+   
     </div>
   ) : <Login setToken ={setToken} />);
 }
