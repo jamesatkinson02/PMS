@@ -1,14 +1,9 @@
-.registerWrapper
-{
-    background-color: lightblue;
-    min-height:100vh;
-    position:relative;
-}
+
 
 .centerForm
 {
     position: absolute;
-    margin-top:10%;
+    bottom:0
 }
 
 .box

@@ -27,9 +27,9 @@ export default function Register()
     }
 
     return( 
-        <div className="registerWrapper">
+        <div>
             <div className="d-flex justify-content-center align-items-center">
-                <Form onSubmit={handleSubmit} className="rounded p-4 p-sm-3 centerForm box">
+                <Form onSubmit={handleSubmit} className="rounded p-5 xl">
                     <h1> Register </h1>
                     <Form.Group className="mb-3">
                         <Form.Label>Username</Form.Label>
