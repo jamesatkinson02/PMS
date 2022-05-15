@@ -1,6 +1,6 @@
 import {React, setState, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import {Form, Button } from 'react-bootstrap';
 
 export default function Register()
 {
@@ -8,6 +8,7 @@ export default function Register()
     const [password, setPassword] = useState();
     const [email, setEmail] = useState();
     const [carRegistration, setCarRegistration] = useState();
+    const [contactNumber, setContactNumber] = useState();
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -17,34 +18,45 @@ export default function Register()
                 'Content-Type': 'application/json'
 
             },
-            body: JSON.stringify({username, password, email, carRegistration})
+            body: JSON.stringify({username, password, email, carRegistration, contactNumber})
         })
 
         window.location.reload();
     }
 
     return( 
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p> Username: </p>
-                    <input type="text" onChange={e => {setUsername(e.target.value)}} required />
-                </label>
-                <label>
-                    <p>Email: </p>
-                    <input type="email" onChange={e => {setEmail(e.target.value)}} required /> 
-                </label>
+        <div className="registerWrapper">
+            <div className="d-flex justify-content-center align-items-center">
+                <Form onSubmit={handleSubmit} className="rounded p-4 p-sm-3 centerForm box">
+                    <h1> Register </h1>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="text" onChange={e => {setUsername(e.target.value)}} required />
+                    </Form.Group>
 
-                <label>
-                    <p>Car Registration: </p>
-                    <input type="text" onChange={e=>{setCarRegistration(e.target.value)}} required />
-                </label>
-                <label>
-                    <p> Password: </p>
-                    <input type="password" onChange={e => {setPassword(e.target.value)}} required />
-                </label>
-                <button type="submit"> Register </button>
-            </form>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control type="email" onChange={e => {setEmail(e.target.value)}} required /> 
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Car Registration</Form.Label>
+                        <Form.Control type="text" onChange={e=>{setCarRegistration(e.target.value)}} required />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Contact Number</Form.Label>
+                        <Form.Control type="tel" onChange={e => setContactNumber(e.target.value)} required></Form.Control>
+                        <Form.Text className="text-muted">We'll never share this with anyone.</Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Password</Form.Label> 
+                        <Form.Control type="password" onChange={e => {setPassword(e.target.value)}} required />
+                    </Form.Group>
+                    <Button variant="primary" type="submit"> Register </Button>
+                </Form>
+            </div> 
         </div>);
 }
 

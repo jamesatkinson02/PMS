@@ -3,17 +3,28 @@
     color:red;
 }
 
-.wrapper
+.loginWrapper
 {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
-    
-    border:2px solid cadetblue
+    background-color: lightblue;
+    min-height:100vh;
+    position:relative;
 }
 
 .center
 {
-    position:relative;
+    position: absolute;
+    top:10%;
+}
+
+
+.centerForm
+{
+    position: absolute;
+    margin-top:10%;
+}
+
+.box
+{
+    box-shadow: 0px 0px 0px rgba(0.0, 0.0, 0.0, 0.2);
+    background-color:white;
 }

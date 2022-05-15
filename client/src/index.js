@@ -1,17 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
-import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+<script defer src="https://www.paypal.com/sdk/js?client-id=AQSlYlKlWhGct7b3C5gxGfvadKvrBhVGwKJo2f10cSC2IDE_PEsCBxMQLhrixEGDbdMOTODb-lAEZEmE&currency=GBP"></script>
 
-ReactDOM.render(
-  <React.StrictMode>  
-    <App />
-  </React.StrictMode>,
+ReactDOM.render
+(
+  // <React.StrictMode>  
+  <App />,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 
