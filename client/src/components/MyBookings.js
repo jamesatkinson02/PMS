@@ -76,7 +76,8 @@ export default function MyBookings()
                
                         <Col>
                         <br/><Button className="myBookingsButton" variant="danger" onClick={() => setCurrentBooking(reserves.bookingID)}>Delete</Button>
-                        <Button className="myBookingsButton" variant="success">Edit</Button>
+       
+                        <Button className="myBookingsButton" variant="success" onClick = {() => alert("A space has been deallocated!")}>I am Leaving</Button>
                         </Col>
                   
 

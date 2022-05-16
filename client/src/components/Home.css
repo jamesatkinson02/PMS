@@ -43,6 +43,8 @@ h1
 .item
 {
     position: relative;
+    margin-left: -0.75em;
+    margin-right: -0.75em;
 }
 
 .item-background
@@ -88,18 +90,90 @@ h1
 .item-foreground:hover .item-subtitle
 {
     font-weight: bolder;
-    color: white;
-    text-shadow: 10px 10px 20px #000000;
-    text-shadow: 2px 2px 4px #000000;
+    color: wheat;
+    text-shadow: 1px 1px 2px #000000;
+    text-rendering: optimizeLegibility;
 }
 
 .btn-block
 {
-    width: 100%;
+    margin-left: -0.75em;
+    width: 101.25%;
     height: 100px;
 }
 
 .display-3
 {
     font-weight: 400;
+}
+
+.carousel-item
+{
+    width: 100%;
+    height: 512px;
+    object-fit: cover;
+}
+
+.img-1
+{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 50%;
+}
+
+.img-2
+{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 50%;
+}
+
+.img-3
+{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 50%;
+}
+
+.reviews
+{
+    margin-top: 1em;
+    margin-left: -0.75em;
+}
+
+.TriImage
+{
+    display: block;
+}
+
+.TriWrapper
+{
+    margin-top: 4em;
+    display: flex;
+    justify-content: center;
+    padding-left: 8em;
+}
+
+.textSubtitles
+{
+    padding-top: 1em;
+    padding-left: 15.5em;
+    width: 2048px;
+}
+
+.Text
+{
+    float: left;
+    width: 550px;
+}
+
+.card
+{
+    margin-bottom: 0.05em;
 }

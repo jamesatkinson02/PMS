@@ -1,5 +1,5 @@
 import {React, setState, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {Form, Button } from 'react-bootstrap';
 
 
@@ -11,6 +11,7 @@ export default function Register()
     const [carRegistration, setCarRegistration] = useState();
     const [contactNumber, setContactNumber] = useState();
     const [errorMsg, setErrorMsg] = useState(null);
+    const navigate = useNavigate();
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -23,13 +24,19 @@ export default function Register()
             body: JSON.stringify({username, password, email, carRegistration, contactNumber})
         }).then(resp =>resp.status);
 
+
+
         if(respNum === 400)
         {
             setErrorMsg("Username already been used!");
-            return;
+            
         }
 
-        window.location.reload();
+        if(!errorMsg)
+            navigate("/login"); 
+
+       
+        
     }
 
     return( 

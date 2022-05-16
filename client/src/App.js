@@ -13,7 +13,10 @@ import { BookingSearch } from "./components/BookingSearch";
 import MyBookings from "./components/MyBookings";
 import ManageAccounts from "./components/ManageAccounts";
 import ParkingUsage from "./components/ParkingUsage"
+import {Support} from "./components/Support"
+
 import useNavigate from 'react';
+import SpaceManagement from "./components/SpaceManagement";
 
 async function verify(token)
 {
@@ -58,9 +61,13 @@ function App() {
           <h1>UEA Parking</h1>                        
           {token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button" onClick={() => setToken(null)}>Signout</a> : <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/login" role="button">Login</a>}
           {!token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/register" role="button">Sign up</a> : null}
-          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Support</a>
-          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a>
+          {!admin ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/support" role="button">Support</a> : null}
+          {!admin ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a> : null}
+          {admin ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/manage-accounts" role="button">Manage Accounts</a> : null}
+          {admin ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/parking-usage" role="button">Park Status</a> : null}
+          
           {token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/my-bookings" role="button">My Bookings</a> : null}
+
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Home</a>
         </div>
       </div>
@@ -71,6 +78,8 @@ function App() {
         <Route path="/home" element={<Home />} /> 
         <Route path="/register" element={<Register />} /> 
         <Route path="/booking" element={<Booking />} />
+        <Route path="/support" element={<Support />} />
+        
         <Route path="/booking/search" element={<BookingSearch />}></Route>
         {token ? <Route path="/my-bookings" element={<MyBookings />} /> : <Route path="/my-bookings" element={<Login setToken={setToken} />}></Route>}
 
@@ -78,7 +87,7 @@ function App() {
         {!token ? <Route path="/login" element={<Login setToken={setToken} />} /> : null}
         {admin ? <Route path="/manage-accounts" element={<ManageAccounts />} /> : null}
         {admin ? <Route path="/parking-usage" element={<ParkingUsage />} /> : null}
-
+     
        </Routes>
       </BrowserRouter> 
    

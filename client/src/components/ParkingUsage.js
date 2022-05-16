@@ -34,7 +34,7 @@ export default function ParkingUsage()
         })
     }, []);
 
-        return <Container> <h1>Parking Usage</h1> {stats.map(parkingLots => <Card style={{marginTop:"10px"}}>
+        return <Container> {stats.map(parkingLots => <Card style={{marginTop:"10px"}}>
             <Card.Header>
                 <Card.Title>Parking Lot</Card.Title>
             </Card.Header>

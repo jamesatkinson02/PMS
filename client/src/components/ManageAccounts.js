@@ -25,7 +25,7 @@ export default function ManageAccounts()
     }, []) 
 
     const handleSubmit = () => {
-        fetch('api/ban-user', {
+        fetch('/api/ban-user', {
             method: 'POST',
             headers:{
                 'Content-Type':'Application/json',
