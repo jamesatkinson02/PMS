@@ -25,8 +25,13 @@ app.use('/api/delete-parkingLot', (req,res) => {
         const json = JSON.parse(buffer);
         const parkingLots = json.locations.filter(parkingLots => parkingLots.name !== req.body.name);
         json.locations = parkingLots;
+        const reservations = json.reservations.filter(reserves => reserves.parkingLot !== req.body.name);
+        json.reservations = reservations;
+        
         fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
         res.send("Parking lot deleted!");
+
+        
     
       }
 
@@ -312,10 +317,6 @@ app.use('/api/request-parking', (req, res) => {
           console.log("yes");
           return;
         }
-        //json.reservations.push({user:decoded.name, parkingLot: req.body.parkingLot, dateFrom: req.body.dateFrom, dateTo: req.body.dateTo, timeFrom: req.body.timeFrom, timeTo: req.body.timeTo})
-
-
-       // fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
        res.send({spacesTable:parkingLocation.spacesTable, spaces:parkingLocation.spaces, freeSpaces:parkingLocation.freeSpaces, prices: parkingLocation.pricing, longitude: parkingLocation.longitude, latitude: parkingLocation.latitude });
         
       }
