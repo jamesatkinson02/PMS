@@ -3,13 +3,13 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents, Rectangle} from 'react-leaflet';
 import {Icon} from 'leaflet';
 import { Navigate, useLocation } from 'react-router-dom';
-import {Row, Card, Container, Col, Form, Alert, Button, Tabs, Tab, Modal} from 'react-bootstrap';
-import "leaflet-routing-machine";
-import L from 'leaflet';
-delete L.Icon.Default.prototype._getIconUrl;
+import {Row, Card, Container, Col, Form, Alert, Button, Tabs, Tab, Modal, Dropdown} from 'react-bootstrap';
 import "./BookingSearch.css"
 import PayPal from "./Paypal"
 import useToken from "../hooks/useToken";
+import "leaflet-routing-machine";
+import L from 'leaflet';
+delete L.Icon.Default.prototype._getIconUrl;
 
 //stops webpack overwriting the image urls for leaflet
 L.Icon.Default.mergeOptions({
@@ -39,10 +39,13 @@ export function BookingSearch(props)
     const {state} = useLocation();
     let [show, setShow] = useState(false);
     const [checkout, setCheckOut] = useState(false);
+    const [row, setRow] = useState(null);
+    const [column, setColumn] = useState(null);
+    
 
     let {token, setToken} = useToken();
  
-    let obj = {pricing: null, spaces: null, freeSpaces: null, parkingLot: null, timeFrom: null, timeTo: null, dateFrom: null, dateTo: null, longitude: null, latitude: null};
+    let obj = {pricing: null, spacesTable: null, spaces: null, freeSpaces: null, parkingLot: null, timeFrom: null, timeTo: null, dateFrom: null, dateTo: null, longitude: null, latitude: null};
     let parkingPrices = [];
     let numHours = 0; 
 
@@ -51,14 +54,17 @@ export function BookingSearch(props)
 
     const shape = [[52.623236, 1.241426], [52.623400, 1.241490]];
 
+    let spacesOptions = [];
+
 
     let mapLocation = [];
     if(state)
     {
         
         obj = state;
+        obj.spacesTable.map(row => Object.keys(row).forEach((key) => spacesOptions.push(<option>{key}</option>)))
         
-        
+    
         let dateFromObj = new Date(obj.dateFrom + " " + obj.timeFrom + ":00");
         let dateToObj = new Date(obj.dateTo + " " + obj.timeTo + ":00");
         
@@ -105,12 +111,13 @@ export function BookingSearch(props)
             headers:{
                 'Content-Type':'application/json'
             },
-            body:JSON.stringify({token: token, parkingLot:obj.parkingLot, price:payment, dateFrom:obj.dateFrom, dateTo:obj.dateTo, timeFrom:obj.timeFrom, timeTo:obj.timeTo})
-        });
-
+            body:JSON.stringify({token: token, parkingLot:obj.parkingLot, row:row, column:column, price:payment, dateFrom:obj.dateFrom, dateTo:obj.dateTo, timeFrom:obj.timeFrom, timeTo:obj.timeTo})
+        }).then(resp => resp.text());
         setShow(false);
 
-        alert("Payment successful!");
+        console.log(row);
+
+        request.then(string => alert(string));
         
         
     }
@@ -140,12 +147,32 @@ export function BookingSearch(props)
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                We have allocated parking space: <strong>(num)</strong> for you.<br/><strong>Pay now to confirm your reservation...</strong>
+                <Form onSubmit = {reserveSpace}>
+                    <Row>
+                        <Col>
+                    <Form.Group>
+                        <Form.Label>Row</Form.Label>
+                        <Form.Select defaultValue="Choose Section..." onChange={(e) => setRow(e.target.value)} required>
+                            <option disabled="disabled">Choose Section...</option>
+                            {spacesOptions}
+                        </Form.Select>
+                        </Form.Group>
+                        </Col>
+                        <Col>
+                        <Form.Group>
+                        <Form.Label>Column</Form.Label><br/>
+                        <Form.Text className="text-muted"></Form.Text>
+                        <Form.Control placeholder={`From 0 to ${spacesOptions.length-1}`} type="number" min={0} max={spacesOptions.length-1} onChange={(e) => setColumn(e.target.value)} required></Form.Control>
+                        </Form.Group>
+                        </Col>
+                </Row>
+                <Button variant="primary" type="submit">Pay Now</Button>
+                </Form>
             </Modal.Body>
             
             <Modal.Footer>
             
-                <Button variant="primary" onClick={() => reserveSpace()}>Pay Now</Button>
+               
                 <Button variant="secondary" onClick={() => setShow(false)}>Close</Button>
             </Modal.Footer>
          </Modal>);

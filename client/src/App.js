@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState} from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -12,10 +12,12 @@ import {About} from "./components/About"
 import { BookingSearch } from "./components/BookingSearch";
 import MyBookings from "./components/MyBookings";
 import ManageAccounts from "./components/ManageAccounts";
+import ParkingUsage from "./components/ParkingUsage"
+import useNavigate from 'react';
 
 async function verify(token)
 {
-  var isVerified = fetch("/api/verify-token", {
+  var isVerified = await fetch("/api/verify-token", {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -25,8 +27,10 @@ async function verify(token)
 }).then(data => data.json()).then(json => {
   if(json.name == 'TokenExpiredError')
   {
+    
     return null;
   }
+ 
   return json;
   
 });
@@ -34,21 +38,17 @@ async function verify(token)
 return isVerified;
 }
 
+
+
 function App() {
   let {token, setToken} = useToken();
+  let [admin, setAdmin] = useState(null);
+  const init = verify(token);
+  init.then(value => {if(!value) {localStorage.clear(); setToken(null);}})
 
-  const init = verify(token).then(val => {
-    if(!val)
-    {
-      localStorage.clear();
-      token = null;
-      return null;
-    }
-    else{
-      return val;
-    }
-     
-  })
+
+    init.then(value => setAdmin(value.admin))
+
 
    return( //token ? (
      
@@ -56,11 +56,12 @@ function App() {
       <div class = "row">
         <div class="p-3 bg-primary bg-gradient text-white">
           <h1>UEA Parking</h1>                        
-          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/login" role="button">Login</a>
+          {token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button" onClick={() => setToken(null)}>Signout</a> : <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/login" role="button">Login</a>}
+          {!token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/register" role="button">Sign up</a> : null}
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Support</a>
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/about" role="button">About</a>
+          {token ? <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/my-bookings" role="button">My Bookings</a> : null}
           <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/home" role="button">Home</a>
-          <a class="btn btn-outline-light bg-gradient links nav-bar-btn" href = "/my-bookings" role="button">My Bookings</a>
         </div>
       </div>
 
@@ -71,11 +72,13 @@ function App() {
         <Route path="/register" element={<Register />} /> 
         <Route path="/booking" element={<Booking />} />
         <Route path="/booking/search" element={<BookingSearch />}></Route>
+        {token ? <Route path="/my-bookings" element={<MyBookings />} /> : <Route path="/my-bookings" element={<Login setToken={setToken} />}></Route>}
+
         <Route path="/about" element={<About />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/login" element={<Login setToken={setToken} />} />
-        
-        {init.admin ? <Route path="/manage-accounts" element={<ManageAccounts />} /> : null}
+        {!token ? <Route path="/login" element={<Login setToken={setToken} />} /> : null}
+        {admin ? <Route path="/manage-accounts" element={<ManageAccounts />} /> : null}
+        {admin ? <Route path="/parking-usage" element={<ParkingUsage />} /> : null}
+
        </Routes>
       </BrowserRouter> 
    

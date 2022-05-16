@@ -15,6 +15,83 @@ app.use(express.json());
 
 dotenv.config();
 
+app.use('/api/delete-parkingLot', (req,res) => {
+  jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
+  {
+    if(err)
+      res.status(401).send(err);
+      else{
+        const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+        const json = JSON.parse(buffer);
+        const parkingLots = json.locations.filter(parkingLots => parkingLots.name !== req.body.name);
+        json.locations = parkingLots;
+        fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
+        res.send("Parking lot deleted!");
+    
+      }
+
+  })
+})
+
+app.use("/api/parking-usage", (req,res) => {
+  jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
+  {
+    if(err)
+      res.status(401).send(err);
+    else
+    {
+      const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+      const json = JSON.parse(buffer);
+      const parkingLots = json.locations.filter(parkingLots => parkingLots.spacesTable);
+      const reservations = json.reservations;
+
+      res.send({parkingLots: parkingLots, reservations: reservations});
+    }
+  })
+})
+
+app.use("/api/ban-user", (req, res) => {
+  jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
+  {
+    if(err)
+      res.status(401).send(err);
+    else
+    {
+      const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+      const json = JSON.parse(buffer);
+
+      console.log(json);
+      
+      const userToBan = json.users.filter(users => users.username !== req.body.username);
+
+      json.users = userToBan;
+
+      fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
+
+      res.send({"message": "User banned!"});
+    }
+  })
+})
+
+app.use("/api/accounts-info", (req,res) => {
+  jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
+  {
+    if(err)
+      res.status(401).send(err);
+    else
+    {
+      const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+      const json = JSON.parse(buffer);
+      
+      const nonAdmin = json.users.filter(users => users.admin === false)
+
+      res.send(nonAdmin);
+
+      
+    }
+  })
+})
+
 app.use("/api/login", (req, res) => {
   let obj = {
     users: []
@@ -62,11 +139,22 @@ app.use("/api/register", (req, res) => {
 
   obj = JSON.parse(buffer);
 
-  obj.users.push({username: req.body.username, password : req.body.password, email: req.body.email, 
-    carRegistration: req.body.carRegistration, contactNumber: req.body.contactNumber, admin: false});
+  let exists = obj.users.find(user => user.username === req.body.username);
 
-  fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(obj));
-
+  if(exists)
+  {
+    res.status(400).send({message: "User Already exists!"});
+    
+  }
+  else
+  {
+    obj.users.push({username: req.body.username, password : req.body.password, email: req.body.email, 
+      carRegistration: req.body.carRegistration, contactNumber: req.body.contactNumber, admin: false});
+  
+    fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(obj));
+  
+  }
+  
 
 })
 
@@ -113,10 +201,37 @@ app.use("/api/delete-bookings", (req,res) => {
       const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
 
       const json = JSON.parse(buffer);
-
+      
+      let spot = json.reservations.find(reserve => req.body.bookingID === reserve.bookingID);
+      
       let result = json.reservations.filter(reserve => req.body.bookingID !== reserve.bookingID);
 
       json.reservations = result;
+
+      
+      let findRow = json.locations.find(location => location.name === spot.parkingLot);
+
+    
+     
+      for(let i=0; i < findRow.spacesTable.length; i++)
+     {
+         if(findRow.spacesTable[i][spot.row])
+         {
+           console.log("yes");
+           findRow.spacesTable[i][spot.row][spot.column] = 1;
+         }
+     }
+     
+     findRow.freeSpaces++;
+
+
+     json.locations.forEach(element => {
+       if(element.name === findRow.name)
+         {
+           element = findRow;
+     }});
+
+      
 
       fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
       
@@ -138,9 +253,36 @@ app.use('/api/make-reservation', (req, res) => {
       var id = crypto.randomBytes(20).toString('hex');
 
       const json = JSON.parse(buffer);
-      json.reservations.push({user:decoded.name, bookingID:id, parkingLot: req.body.parkingLot, price: req.body.price, dateFrom: req.body.dateFrom, dateTo: req.body.dateTo, timeFrom: req.body.timeFrom, timeTo: req.body.timeTo})
 
-      fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
+      let findRow = json.locations.find(location => location.name === req.body.parkingLot);
+
+      
+
+       for(let i=0; i < findRow.spacesTable.length; i++)
+      {
+          if(findRow.spacesTable[i][req.body.row])
+          {
+            if(findRow.spacesTable[i][req.body.row][req.body.column] !== 1)
+            {
+              res.status(400).send("Space has already been reserved!");
+              return;
+            }
+            findRow.spacesTable[i][req.body.row][req.body.column] = id;
+          }
+      }
+      
+      findRow.freeSpaces--;
+      console.log(findRow.freeSpaces);
+      json.locations.forEach(element => {
+        if(element.name === findRow.name)
+          {
+            element = findRow;
+          }
+      });
+      
+      json.reservations.push({user:decoded.name, bookingID:id, parkingLot: req.body.parkingLot, row:req.body.row, column:req.body.column, price: req.body.price, dateFrom: req.body.dateFrom, dateTo: req.body.dateTo, timeFrom: req.body.timeFrom, timeTo: req.body.timeTo})
+
+     fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
     }
   })
 })
@@ -174,7 +316,7 @@ app.use('/api/request-parking', (req, res) => {
 
 
        // fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
-       res.send({spaces: parkingLocation.spaces, freeSpaces:parkingLocation.freeSpaces, prices: parkingLocation.pricing, longitude: parkingLocation.longitude, latitude: parkingLocation.latitude });
+       res.send({spacesTable:parkingLocation.spacesTable, spaces:parkingLocation.spaces, freeSpaces:parkingLocation.freeSpaces, prices: parkingLocation.pricing, longitude: parkingLocation.longitude, latitude: parkingLocation.latitude });
         
       }
    

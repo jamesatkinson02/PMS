@@ -1,6 +1,7 @@
 .myBookingsContainer
 {
     background-color: rgb(217, 228, 243);
+    min-height: 100vh;
 }
 
 #your-img {

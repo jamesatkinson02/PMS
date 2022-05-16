@@ -1,5 +1,6 @@
 import { React, useEffect, useState} from 'react';
 import {Container, Card, ListGroup, Row, Col, Button, Modal} from 'react-bootstrap';
+import { Navigate, useNavigate } from 'react-router-dom';
 import useToken from '../hooks/useToken';
 import "./myBookings.css"
 
@@ -7,8 +8,7 @@ export default function MyBookings()
 {
     const [bookings, setBookings] = useState([]);
     const [currentBooking, setCurrentBooking] = useState(null);
-   // const [editBooking, setEditBooking] = useState(false);
-    
+    const navigate = useNavigate();
 
     const initialState = {
         dateFrom: '',
@@ -42,6 +42,7 @@ export default function MyBookings()
             body: JSON.stringify({token:token})
         }).then(resp => resp.json()).then(data => {
          //   data.reservations.sort((a,b) => (new Date(a.dateFrom).getDay() >  new Date(b.dateFrom).getDay()) ? 1 : -1);
+
             data.reservations.sort((a,b) => {
                 return new Date(b.dateFrom).getDate() - new Date(a.dateFrom).getDate();
             })
@@ -51,9 +52,9 @@ export default function MyBookings()
 
 
     return (
-    <div   className="myBookingsContainer">
+    <div  className="myBookingsContainer">
     <Container>
-        <p>My Bookings</p>
+        {bookings.length == 0 ? <Card><Card.Header><h3>You currently have no parking reservations!</h3></Card.Header><Card.Body><Button onClick={() => navigate("/booking")}>Click to book</Button></Card.Body></Card> : null}
         {bookings.map(reserves =>
             <Row>
                 <Col>
@@ -106,6 +107,7 @@ export default function MyBookings()
             <Button variant="success" onClick = {() => cancelBooking()}>Yes</Button> <Button variant="danger" onClick = {() => setCurrentBooking(null)}>No</Button>
             </Modal.Footer>
         </Modal> : null }
+        <Button onClick={() => navigate("/booking")}>Add a New Booking</Button>
     </Container>
     </div>
     );

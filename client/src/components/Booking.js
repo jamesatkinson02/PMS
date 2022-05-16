@@ -135,7 +135,7 @@ export function Booking()
               return;
             }
            //   dispatch({type: 'SET MAP LOCATION', location:{longitude:data.longitude, latitude:data.latitude}});
-              navigate('/booking/search', {state: {token: token, pricing: data.prices, spaces: data.spaces, freeSpaces: data.freeSpaces, parkingLot: state.parkingLot, timeFrom:state.timeFrom, timeTo:state.timeTo, dateFrom:state.dateFrom, dateTo: state.dateTo, longitude: data.longitude, latitude:data.latitude}});
+              navigate('/booking/search', {state: {token: token, pricing: data.prices, spacesTable:data.spacesTable, spaces: data.spaces, freeSpaces: data.freeSpaces, parkingLot: state.parkingLot, timeFrom:state.timeFrom, timeTo:state.timeTo, dateFrom:state.dateFrom, dateTo: state.dateTo, longitude: data.longitude, latitude:data.latitude}});
               
               
             });
@@ -198,49 +198,7 @@ export function Booking()
           </div>
 
         </div>
-        <Row className="d-flex justify-content-center align-items-center">
-        <Card style={{ margin: "10px", width: '32rem' }}>
-  <Card.Body>
-    <h2>UEA Parking just got easier!</h2>
-    <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
-    <Card.Text>
-      Some quick example text to build on the card title and make up the bulk of
-      the card's content.
-    </Card.Text>
-  </Card.Body>
-  <ListGroup className="list-group-flush">
-    <ListGroupItem>Cras justo odio</ListGroupItem>
-    <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
-    <ListGroupItem>Vestibulum at eros</ListGroupItem>
-  </ListGroup>
-  <Card.Body>
-    <Card.Link href="#">Card Link</Card.Link>
-    <Card.Link href="#">Another Link</Card.Link>
-  </Card.Body>
-</Card>
-<Card style={{margin: "10px", width: '32rem' }}>
-  <Card.Body>
-    <h2>UEA Parking just got easier!</h2>
-    <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
-    <Card.Text>
-      Some quick example text to build on the card title and make up the bulk of
-      the card's content.
-    </Card.Text>
-  </Card.Body>
-  <ListGroup className="list-group-flush">
-    <ListGroupItem>Cras justo odio</ListGroupItem>
-    <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
-    <ListGroupItem>Vestibulum at eros</ListGroupItem>
-  </ListGroup>
-  <Card.Body>
-    <Card.Link href="#">Card Link</Card.Link>
-    <Card.Link href="#">Another Link</Card.Link>
-  </Card.Body>
-</Card>
-
-
-</Row>
- 
+  
         </div>)
        
              

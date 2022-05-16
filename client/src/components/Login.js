@@ -34,6 +34,7 @@ export default function Login({setToken})
     const [register, setRegister] = useState();
     const [success, setSuccess] = useState();
     const [show, setShow] = useState(true);
+    const navigate = useNavigate();
     const handleSubmit = async e => {
         e.preventDefault();
 
@@ -42,6 +43,7 @@ export default function Login({setToken})
         {
             setSuccess(true);
             setToken(token);    
+            navigate("/home")
         }
         else
         {
@@ -66,9 +68,10 @@ export default function Login({setToken})
             </Form.Group>
             {success===false ? <Alert variant="danger"><h6>Incorrect Username/Password </h6> </Alert> : null}
             <Button variant="primary" type="submit">Sign in </Button>
+            <Button variant="primary" style={{margin:"10px"}} onClick={() => {setRegister(true)}}> Sign up here! </Button>
         </Form>
         </div>
-        <button style={{margin:"10px"}} onClick={() => {setRegister(true)}}> Sign up here! </button>
+        
         </div>
     ) : <Register />
 }

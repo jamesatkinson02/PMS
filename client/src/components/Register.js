@@ -10,24 +10,30 @@ export default function Register()
     const [email, setEmail] = useState();
     const [carRegistration, setCarRegistration] = useState();
     const [contactNumber, setContactNumber] = useState();
-  
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const handleSubmit = async e => {
         e.preventDefault();
-        fetch("/api/register", {
+        let respNum = await fetch("/api/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
 
             },
             body: JSON.stringify({username, password, email, carRegistration, contactNumber})
-        })
+        }).then(resp =>resp.status);
+
+        if(respNum === 400)
+        {
+            setErrorMsg("Username already been used!");
+            return;
+        }
 
         window.location.reload();
     }
 
     return( 
-        <div>
+        <div className="registerWrapper">
             <div className="d-flex justify-content-center align-items-center">
                 <Form onSubmit={handleSubmit} className="rounded p-5 xl">
                     <h1> Register </h1>
@@ -35,7 +41,6 @@ export default function Register()
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" onChange={e => {setUsername(e.target.value)}} required />
                     </Form.Group>
-                
                     <Form.Group className="mb-3">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" onChange={e => {setEmail(e.target.value)}} required /> 
@@ -56,6 +61,8 @@ export default function Register()
                         <Form.Label>Password</Form.Label> 
                         <Form.Control type="password" onChange={e => {setPassword(e.target.value)}} required />
                     </Form.Group>
+                    {errorMsg ? <p style={{color:"red"}}>{errorMsg}</p> : null}
+            
                     <Button variant="primary" type="submit"> Register </Button>
                 </Form>
             </div> 
