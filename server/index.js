@@ -15,6 +15,19 @@ app.use(express.json());
 
 dotenv.config();
 
+app.use("/api/send-ticket", (req, res) => {
+        const buffer = fs.readFileSync(`${__dirname}/db/drivers.json`);
+        const json = JSON.parse(buffer);
+
+        json.tickets.push({"name": req.body.name, "email": req.body.email, "message": req.body.msg});
+        
+        fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
+        res.send("Parking lot deleted!");
+
+   
+
+  })
+
 app.use('/api/delete-parkingLot', (req,res) => {
   jwt.verify(req.body.token, process.env.TOKEN_SECRET, function(err, decoded)
   {
@@ -31,8 +44,6 @@ app.use('/api/delete-parkingLot', (req,res) => {
         fs.writeFileSync(`${__dirname}/db/drivers.json`, JSON.stringify(json));
         res.send("Parking lot deleted!");
 
-        
-    
       }
 
   })
